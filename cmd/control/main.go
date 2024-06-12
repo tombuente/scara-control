@@ -5,14 +5,31 @@ import (
 	"log/slog"
 	"net"
 
+	"google.golang.org/grpc"
+
 	"github.com/tombuente/scara-control/internal/control"
+	pb "github.com/tombuente/scara-proto"
 )
 
 func main() {
-	listener, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", 7777))
+	controlService := control.NewService()
+
+	serveRPC(controlService, "tcp", fmt.Sprintf("localhost:%d", 5000))
+}
+
+func serveRPC(service *control.Service, network string, address string) error {
+	listener, err := net.Listen(network, address)
 	if err != nil {
-		slog.Error("Unable to create listener", "error", err)
+		return fmt.Errorf("unable to create listener: %w", err)
 	}
 
-	control.Serve(listener)
+	grpcServer := grpc.NewServer()
+	pb.RegisterRobotServer(grpcServer, control.NewServer(service))
+
+	slog.Info("Listening...")
+	if err := grpcServer.Serve(listener); err != nil {
+		return fmt.Errorf("unable to serve grpc server: %w", err)
+	}
+
+	return nil
 }

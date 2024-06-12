@@ -3,7 +3,7 @@ module github.com/tombuente/scara-control
 go 1.22.4
 
 require (
-	github.com/tombuente/scara-proto v0.0.0-20240610171239-e63cbcbe3c18
+	github.com/tombuente/scara-proto v0.0.0-20240612130804-676a65a05ee7
 	google.golang.org/grpc v1.64.0
 )
 
