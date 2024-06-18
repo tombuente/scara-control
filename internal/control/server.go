@@ -2,12 +2,13 @@ package control
 
 import (
 	"context"
+	"fmt"
 
 	pb "github.com/tombuente/scara-proto"
 )
 
 type Server struct {
-	pb.UnimplementedRobotServer
+	pb.UnimplementedScaraServer
 
 	service *Service
 }
@@ -20,9 +21,11 @@ func NewServer(service *Service) *Server {
 	return &s
 }
 
-func (s *Server) ExecCommand(ctx context.Context, req *pb.ExecCommandRequest) (*pb.ExecCommandResponse, error) {
-	cmd := command{command: req.Command}
-	id := s.service.addCommand(cmd)
+func (s *Server) UploadProgram(ctx context.Context, req *pb.UploadProgramRequest) (*pb.Empty, error) {
+	fmt.Println(req.Program)
 
-	return &pb.ExecCommandResponse{Id: id}, nil
+	// cmd := command{command: req.Command}
+	// id := s.service.addCommand(cmd)
+
+	return &pb.Empty{}, nil
 }

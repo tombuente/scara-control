@@ -24,7 +24,7 @@ func serveRPC(service *control.Service, network string, address string) error {
 	}
 
 	grpcServer := grpc.NewServer()
-	pb.RegisterRobotServer(grpcServer, control.NewServer(service))
+	pb.RegisterScaraServer(grpcServer, control.NewServer(service))
 
 	slog.Info("Listening...")
 	if err := grpcServer.Serve(listener); err != nil {
